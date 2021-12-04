@@ -8,6 +8,12 @@ import time as t
 import win32api
 import win32con
 
+def countDown(n):
+    while n > 0:
+        time.sleep(1)
+        print(n)
+        n = n - 1
+
 mid = None
 while True:
     try:
@@ -18,13 +24,13 @@ while True:
         pass
 
 data = {
-    48:81,
-    50:87,
-    52:69,
-    53:82,
-    55:84,
-    57:89,
-    59:85,
+    72:81,
+    74:87,
+    76:69,
+    77:82,
+    79:84,
+    81:89,
+    83:85,
 
     60:65,
     62:83,
@@ -34,18 +40,18 @@ data = {
     69:72,
     71:74,
 
-    72:90,
-    74:88,
-    76:67,
-    77:86,
-    79:66,
-    81:78,
-    83:77
+    48:90,
+    50:88,
+    52:67,
+    53:86,
+    55:66,
+    57:78,
+    59:77
 }
 mididict = []
 output = []
 
-print("midi檔處理中...")
+print("\nmidi檔處理中...")
 for i in mid:
     if i.type == 'note_on' or i.type == 'note_off' or i.type == 'time_signature':
         mididict.append(i.dict())
@@ -60,16 +66,17 @@ for i in mididict:
         mem2.append(i['note'])
         mem2.append(i['time'])
         output.append(mem2)
-print("處理完畢")
+print("檔案處理完畢\n")
 
 input("按enter開始...")
+print("倒數5秒")
+countDown(5)
 
 startTime = t.perf_counter()
 
 for i in range(len(output)):
     while True:
         if t.perf_counter() - startTime > output[i][1]:
-            print(data[output[i][0]])
             try:
                 win32api.keybd_event(data[output[i][0]], 0, 0, 0)
                 win32api.keybd_event(data[output[i][0]], 0, win32con.KEYEVENTF_KEYUP, 0)
