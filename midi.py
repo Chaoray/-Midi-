@@ -10,7 +10,7 @@ import win32con
 
 def countDown(n):
     while n > 0:
-        time.sleep(1)
+        t.sleep(1)
         print(n)
         n = n - 1
 
@@ -23,30 +23,31 @@ while True:
     except:
         pass
 
+offset = 60
 data = {
-    48:90,
-    50:88,
-    52:67,
-    53:86,
-    55:66,
-    57:78,
-    59:77,
+    12:81,
+    14:87,
+    16:69,
+    17:82,
+    19:84,
+    21:89,
+    23:85,
 
-    60:65,
-    62:83,
-    64:68,
-    65:70,
-    67:71,
-    69:72,
-    71:74,
+    0:65,
+    2:83,
+    4:68,
+    5:70,
+    7:71,
+    9:72,
+    11:74,
 
-    72:81,
-    74:87,
-    76:69,
-    77:82,
-    79:84,
-    81:89,
-    83:85
+    -12:90,
+    -10:88,
+    -8:67,
+    -7:86,
+    -5:66,
+    -3:78,
+    -1:77
 }
 mididict = []
 output = []
@@ -68,20 +69,31 @@ for i in mididict:
         output.append(mem2)
 print("檔案處理完畢\n")
 
+while True:
+    choose = input("要設定偏差值嗎?(y/n)")
+    if choose == 'y':
+        buffer = input("所需的偏差值:")
+        if type(buffer) == type(1):
+            offset = buffer
+            break
+    elif choose == 'n':
+        break
+
 input("按enter開始...")
 print("倒數5秒")
 countDown(5)
 
+print("開始播放")
 startTime = t.perf_counter()
 
 for i in range(len(output)):
     while True:
         if t.perf_counter() - startTime > output[i][1]:
             try:
-                win32api.keybd_event(data[output[i][0]], 0, 0, 0)
-                win32api.keybd_event(data[output[i][0]], 0, win32con.KEYEVENTF_KEYUP, 0)
+                win32api.keybd_event(data[output[i][0] - offset], 0, 0, 0)
+                win32api.keybd_event(data[output[i][0] - offset], 0, win32con.KEYEVENTF_KEYUP, 0)
             except:
                 pass
             break
 
-print("播放結束")
+input("播放結束")
