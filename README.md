@@ -9,8 +9,8 @@
 3. press enter then click on the genshin window
 -----
 - offset  
-Offset gets lower, the note will be played higher
-it's the same in opposite way
+Offset gets lower, the note will be played higher  
+it's the same in opposite way  
 the default set is 60(C4)
 
 `中文`
