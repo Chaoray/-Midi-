@@ -8,12 +8,12 @@
 2. type your midi file path
 3. press enter then click on the genshin window
 -----
-- offset
+- offset  
 Offset gets lower, the note will be played higher
 it's the same in opposite way
 the default set is 60(C4)
 
-`Chinese`
+`中文`
 ### Warning:僅接受偏差值上下兩個八度的音
 
 原神彈琴太痛苦了，彈個琴還得修練100天  
