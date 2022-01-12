@@ -8,22 +8,6 @@ import time as t
 import win32api
 import win32con
 
-def countDown(n):
-    while n > 0:
-        t.sleep(1)
-        print(f'in {i} sec')
-        n = n - 1
-
-mid = None
-while True:
-    try:
-        path = input("midi File Path:")
-        mid = MidiFile(path)
-        break
-    except:
-        pass
-
-offset = 60
 data = {
     12:81,
     14:87,
@@ -49,51 +33,79 @@ data = {
     -3:78,
     -1:77
 }
-mididict = []
-output = []
 
-print("\nmidi File Processing...")
-for i in mid:
-    if i.type == 'note_on' or i.type == 'note_off' or i.type == 'time_signature':
-        mididict.append(i.dict())
+def countDown(n):
+    while n > 0:
+        t.sleep(1)
+        print(f'in {n} sec')
+        n = n - 1
 
-mem1 = 0
-for i in mididict:
-    time = i['time'] + mem1
-    i['time'] = time
-    mem1 = i['time']
-    mem2=[]
-    if i['type'] == 'note_on':
-        mem2.append(i['note'])
-        mem2.append(i['time'])
-        output.append(mem2)
-print("Process is done\n")
+def main():
+    mid = None
 
-while True:
-    choose = input("Do you wanna set the offset?(y/n)")
-    if choose == 'y':
-        buffer = input("offset:")
-        if type(buffer) == type(1):
-            offset = buffer
-            break
-    elif choose == 'n':
-        break
-
-input("Press enter to start...")
-print("in 5 sec")
-countDown(5)
-
-print("Start play")
-startTime = t.perf_counter()
-
-for i in range(len(output)):
     while True:
-        if t.perf_counter() - startTime > output[i][1]:
-            try:
-                win32api.keybd_event(data[output[i][0] - offset], 0, 0, 0)
-                win32api.keybd_event(data[output[i][0] - offset], 0, win32con.KEYEVENTF_KEYUP, 0)
-            except:
-                pass
+        try:
+            path = input("midi File Path:")
+            mid = MidiFile(path)
+            break
+        except:
+            pass
+
+    mididict = []
+    output = []
+    offset = 60
+
+    print("\nmidi File Processing...")
+    for i in mid:
+        if i.type == 'note_on' or i.type == 'note_off' or i.type == 'time_signature':
+            mididict.append(i.dict())
+
+    mem1 = 0
+    for i in mididict:
+        time = i['time'] + mem1
+        i['time'] = time
+        mem1 = i['time']
+        mem2=[]
+        if i['type'] == 'note_on':
+            mem2.append(i['note'])
+            mem2.append(i['time'])
+            output.append(mem2)
+    print("Process is done\n")
+
+    while True:
+        choose = input("Do you wanna set the offset?(y/n)")
+        if choose == 'y':
+            buffer = input("offset:")
+            if type(buffer) == type(1):
+                offset = buffer
+                break
+            else:
+                continue
+        elif choose == 'n':
             break
 
-input("End play")
+    input("Press enter to start...")
+    print("in 5 sec")
+    countDown(5)
+
+    print("Start play")
+    startTime = t.perf_counter()
+
+    for i in range(len(output)):
+        while True:
+            if t.perf_counter() - startTime > output[i][1]:
+                try:
+                    win32api.keybd_event(data[output[i][0] - offset], 0, 0, 0)
+                    win32api.keybd_event(data[output[i][0] - offset], 0, win32con.KEYEVENTF_KEYUP, 0)
+                except:
+                    pass
+                break
+while True:
+    main()
+    choose = input("End play, play another?(y/n)")
+    if choose == "y":
+        pass
+    elif choose == "n":
+        break
+    else:
+        break
