@@ -11,13 +11,13 @@ import win32con
 def countDown(n):
     while n > 0:
         t.sleep(1)
-        print(n)
+        print(f'in {i} sec')
         n = n - 1
 
 mid = None
 while True:
     try:
-        path = input("你的midi檔路徑:")
+        path = input("midi File Path:")
         mid = MidiFile(path)
         break
     except:
@@ -52,7 +52,7 @@ data = {
 mididict = []
 output = []
 
-print("\nmidi檔處理中...")
+print("\nmidi File Processing...")
 for i in mid:
     if i.type == 'note_on' or i.type == 'note_off' or i.type == 'time_signature':
         mididict.append(i.dict())
@@ -67,23 +67,23 @@ for i in mididict:
         mem2.append(i['note'])
         mem2.append(i['time'])
         output.append(mem2)
-print("檔案處理完畢\n")
+print("Process is done\n")
 
 while True:
-    choose = input("要設定偏差值嗎?(y/n)")
+    choose = input("Do you wanna set the offset?(y/n)")
     if choose == 'y':
-        buffer = input("所需的偏差值:")
+        buffer = input("offset:")
         if type(buffer) == type(1):
             offset = buffer
             break
     elif choose == 'n':
         break
 
-input("按enter開始...")
-print("倒數5秒")
+input("Press enter to start...")
+print("in 5 sec")
 countDown(5)
 
-print("開始播放")
+print("Start play")
 startTime = t.perf_counter()
 
 for i in range(len(output)):
@@ -96,4 +96,4 @@ for i in range(len(output)):
                 pass
             break
 
-input("播放結束")
+input("End play")
